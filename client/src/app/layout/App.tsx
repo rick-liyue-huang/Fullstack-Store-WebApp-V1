@@ -1,10 +1,8 @@
 
-import { useEffect, useState } from 'react'
-import { Product } from '../models/products'
-import { Catelog } from '../../features/catelog/Catelog'
+import { useState } from 'react'
 import { Box, Container, createTheme, CssBaseline, ThemeProvider } from '@mui/material'
 import { NavBar } from './NavBar'
-import { dark } from '@mui/material/styles/createPalette'
+import { Outlet } from 'react-router-dom';
 
 
 function App() {
@@ -15,7 +13,7 @@ function App() {
   //   }
   // })
 
-  const [products, setProducts] = useState<Product[]>([]);
+
   const [darkMode, setDarkMode] = useState(false);
 
   const paletteType = darkMode ? 'dark' : 'light';
@@ -27,31 +25,23 @@ function App() {
   })
 
 
-  useEffect(() => {
-    fetch('https://localhost:5001/api/products')
-      .then(response => response.json())
-      .then(data => setProducts(data))
-      .catch(error => console.log(error))
-
-  }, [])
-
   const toggleDarkMode = () => {
     setDarkMode(prev => !prev)
   }
 
-  const addProduct = () => {
-    setProducts(prev => [...prev, {
-      id: prev.length + 1,
-      name: 'New Product',
-      description: 'New Description',
-      price: 100,
-      pictureUrl: 'https://picsum.photos/200',
-      type: 'New Type',
-      brand: 'New Brand',
-      quantityInStock: 100
-    }]
-    )
-  }
+  // const addProduct = () => {
+  //   setProducts(prev => [...prev, {
+  //     id: prev.length + 1,
+  //     name: 'New Product',
+  //     description: 'New Description',
+  //     price: 100,
+  //     pictureUrl: 'https://picsum.photos/200',
+  //     type: 'New Type',
+  //     brand: 'New Brand',
+  //     quantityInStock: 100
+  //   }]
+  //   )
+  // }
 
   return (
     <ThemeProvider theme={theme}>
@@ -64,7 +54,7 @@ function App() {
         paddingTop: '76px'
       }}>
         <Container maxWidth='xl' >
-          <Catelog products={products} />
+          <Outlet />
         </Container>
       </Box>
     </ThemeProvider>
