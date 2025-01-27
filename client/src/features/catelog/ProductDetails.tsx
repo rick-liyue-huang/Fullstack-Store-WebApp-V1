@@ -2,18 +2,21 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Product } from '../../app/models/products';
 import { Button, Divider, Grid2, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography } from '@mui/material';
+import { useFetchProductDetailsQuery } from './catelogApi';
 
 export const ProductDetails = () => {
 
   const { id } = useParams();
-  const [product, setProduct] = useState<Product | null>(null);
+  // const [product, setProduct] = useState<Product | null>(null);
 
-  useEffect(() => {
-    fetch(`https://localhost:5001/api/products/${id}`)
-      .then(response => response.json())
-      .then(data => setProduct(data))
-      .catch(error => console.log(error));
-  }, [id]);
+  // useEffect(() => {
+  //   fetch(`https://localhost:5001/api/products/${id}`)
+  //     .then(response => response.json())
+  //     .then(data => setProduct(data))
+  //     .catch(error => console.log(error));
+  // }, [id]);
+
+  const { data: product, isLoading, error } = useFetchProductDetailsQuery(id ? parseInt(id) : 0);
 
   const productDetails = [
     { label: 'Name', value: product?.name },
@@ -23,8 +26,12 @@ export const ProductDetails = () => {
     { label: 'Count In Stock', value: product?.quantityInStock },
   ]
 
-  if (!product) {
+  if (isLoading) {
     return <div>Loading...</div>
+  }
+
+  if (error) {
+    return <div>{`Single Product display wrong happened`}</div>
   }
 
   return (

@@ -1,7 +1,9 @@
 import { DarkMode, LightMode, ShoppingCart } from '@mui/icons-material';
-import { AppBar, Badge, Box, Icon, IconButton, List, ListItem, Toolbar, Typography } from '@mui/material'
+import { AppBar, Badge, Box, Icon, IconButton, LinearProgress, List, ListItem, Toolbar, Typography } from '@mui/material'
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { setDarkMode } from './uiSlice';
 
 const middleLinks = [
   { title: 'categories', path: '/catelog' },
@@ -14,9 +16,13 @@ const rightLinks = [
   { title: 'register', path: '/register' },
 ];
 
-export const NavBar = ({ toggleDarkMode, darkMode }: { toggleDarkMode: () => void, darkMode: boolean }) => {
+export const NavBar = () => {
 
   const navigate = useNavigate();
+
+
+  const { isLoading, darkMode } = useAppSelector((state) => state.ui);
+  const dispatch = useAppDispatch();
 
   const NavbarStyleObject = {
     color: `${darkMode ? '#a99f9f' : '#eee'}`, textDecoration: 'none',
@@ -64,11 +70,15 @@ export const NavBar = ({ toggleDarkMode, darkMode }: { toggleDarkMode: () => voi
           </List>
         </Box>
         <Box>
-          <IconButton onClick={toggleDarkMode}>
+          <IconButton onClick={() => dispatch(setDarkMode())}>
             <Icon>{darkMode ? <DarkMode sx={{ color: '#333' }} /> : <LightMode sx={{ color: '#eee' }} />}</Icon>
           </IconButton>
         </Box>
       </Toolbar>
+
+      {
+        isLoading && <Box><LinearProgress color='info' /></Box>
+      }
     </AppBar >
   )
 }
